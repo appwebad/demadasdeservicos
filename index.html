@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demanda Serviços</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <main class="app">
+    <section class="hero">
+      <h1>Demanda Serviços</h1>
+      <p>Aplicativo para empresas publicarem demandas diárias e candidatos se inscreverem.</p>
+    </section>
+
+    <section id="escolha" class="card">
+      <h2>Escolha seu acesso</h2>
+      <div class="grid-2">
+        <button class="btn azul" onclick="mostrarTela('empresa')">Sou Empresa</button>
+        <button class="btn vermelho" onclick="mostrarTela('candidato')">Sou Candidato</button>
+      </div>
+    </section>
+
+    <section id="empresa" class="card hidden">
+      <h2>Cadastro da Empresa</h2>
+
+      <input id="empresaNome" placeholder="Nome da empresa" />
+      <input id="empresaCnpj" placeholder="CNPJ" />
+      <input id="empresaSegmento" placeholder="Segmento" />
+      <input id="empresaEmail" placeholder="E-mail" />
+      <input id="empresaWhatsapp" placeholder="WhatsApp" />
+
+      <h3>Publicar Demanda</h3>
+
+      <input id="tipoVaga" placeholder="Tipo da vaga" />
+      <input id="valorDiaria" placeholder="Valor da diária" />
+      <input id="dataPagamento" type="date" />
+      <input id="localVaga" placeholder="Local" />
+
+      <select id="tipoLocal">
+        <option value="">Selecione o local</option>
+        <option value="Galpão">Galpão</option>
+        <option value="Loja">Loja</option>
+      </select>
+
+      <button class="btn azul" onclick="salvarEmpresa()">Salvar Empresa e Demanda</button>
+      <button class="btn voltar" onclick="voltar()">Voltar</button>
+    </section>
+
+    <section id="candidato" class="card hidden">
+      <h2>Cadastro do Candidato</h2>
+
+      <input id="candNome" placeholder="Nome completo" />
+      <input id="candCpf" placeholder="CPF" />
+      <input id="candRg" placeholder="RG" />
+      <input id="candEndereco" placeholder="Endereço" />
+      <input id="candCep" placeholder="CEP" />
+      <input id="candEmail" placeholder="E-mail" />
+      <input id="candWhatsapp" placeholder="WhatsApp" />
+
+      <button class="btn vermelho" onclick="salvarCandidato()">Salvar Candidato</button>
+      <button class="btn voltar" onclick="voltar()">Voltar</button>
+    </section>
+
+    <section class="card">
+      <h2>Demandas Disponíveis</h2>
+      <div id="listaDemandas"></div>
+    </section>
+
+    <section class="card">
+      <h2>Candidatos Cadastrados</h2>
+      <div id="listaCandidatos"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
