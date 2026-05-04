@@ -4,76 +4,263 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Demanda Serviços</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Plataforma de demandas diárias</p>
+        <h1>Demanda Serviços</h1>
+      </div>
+      <button id="logoutBtn" class="btn btn-outline hidden">Sair</button>
+    </header>
 
-  <main class="app">
-    <section class="hero">
-      <h1>Demanda Serviços</h1>
-      <p>Aplicativo para empresas publicarem demandas diárias e candidatos se inscreverem.</p>
-    </section>
+    <main id="app"></main>
+  </div>
 
-    <section id="escolha" class="card">
-      <h2>Escolha seu acesso</h2>
-      <div class="grid-2">
-        <button class="btn azul" onclick="mostrarTela('empresa')">Sou Empresa</button>
-        <button class="btn vermelho" onclick="mostrarTela('candidato')">Sou Candidato</button>
+  <template id="home-template">
+    <section class="hero card">
+      <div class="hero-content">
+        <span class="tag">Azul + vermelho + branco</span>
+        <h2>Conecte empresas e candidatos para serviços diários</h2>
+        <p>
+          Aplicativo responsivo para Android e computador com duas áreas de acesso:
+          <strong>Empresa</strong> e <strong>Candidato</strong>.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button class="btn btn-primary" data-route="candidato-auth">Entrar como Candidato</button>
+        <button class="btn btn-danger" data-route="empresa-auth">Entrar como Empresa</button>
       </div>
     </section>
 
-    <section id="empresa" class="card hidden">
-      <h2>Cadastro da Empresa</h2>
-
-      <input id="empresaNome" placeholder="Nome da empresa" />
-      <input id="empresaCnpj" placeholder="CNPJ" />
-      <input id="empresaSegmento" placeholder="Segmento" />
-      <input id="empresaEmail" placeholder="E-mail" />
-      <input id="empresaWhatsapp" placeholder="WhatsApp" />
-
-      <h3>Publicar Demanda</h3>
-
-      <input id="tipoVaga" placeholder="Tipo da vaga" />
-      <input id="valorDiaria" placeholder="Valor da diária" />
-      <input id="dataPagamento" type="date" />
-      <input id="localVaga" placeholder="Local" />
-
-      <select id="tipoLocal">
-        <option value="">Selecione o local</option>
-        <option value="Galpão">Galpão</option>
-        <option value="Loja">Loja</option>
-      </select>
-
-      <button class="btn azul" onclick="salvarEmpresa()">Salvar Empresa e Demanda</button>
-      <button class="btn voltar" onclick="voltar()">Voltar</button>
+    <section class="features-grid">
+      <article class="card feature">
+        <h3>Candidato</h3>
+        <p>Cadastro completo com dados pessoais e inscrição rápida nas vagas disponíveis.</p>
+      </article>
+      <article class="card feature">
+        <h3>Empresa</h3>
+        <p>Cadastro da empresa, publicação de demandas, valor da diária e acompanhamento de inscritos.</p>
+      </article>
+      <article class="card feature">
+        <h3>Responsivo</h3>
+        <p>Layout otimizado para celular, tablet, notebook e desktop com armazenamento local.</p>
+      </article>
     </section>
+  </template>
 
-    <section id="candidato" class="card hidden">
-      <h2>Cadastro do Candidato</h2>
+  <template id="candidato-auth-template">
+    <section class="auth-layout two-column">
+      <div class="card">
+        <div class="section-title">
+          <span class="badge badge-blue">Login candidato</span>
+          <h2>Acessar conta</h2>
+        </div>
+        <form id="candidateLoginForm" class="form-stack">
+          <label>
+            <span>E-mail</span>
+            <input type="email" name="email" placeholder="seuemail@exemplo.com" required />
+          </label>
+          <label>
+            <span>Senha</span>
+            <input type="password" name="password" placeholder="Digite sua senha" required />
+          </label>
+          <button class="btn btn-primary" type="submit">Entrar</button>
+        </form>
+      </div>
 
-      <input id="candNome" placeholder="Nome completo" />
-      <input id="candCpf" placeholder="CPF" />
-      <input id="candRg" placeholder="RG" />
-      <input id="candEndereco" placeholder="Endereço" />
-      <input id="candCep" placeholder="CEP" />
-      <input id="candEmail" placeholder="E-mail" />
-      <input id="candWhatsapp" placeholder="WhatsApp" />
-
-      <button class="btn vermelho" onclick="salvarCandidato()">Salvar Candidato</button>
-      <button class="btn voltar" onclick="voltar()">Voltar</button>
+      <div class="card">
+        <div class="section-title">
+          <span class="badge badge-red">Cadastro candidato</span>
+          <h2>Criar conta</h2>
+        </div>
+        <form id="candidateRegisterForm" class="form-grid">
+          <label><span>Nome</span><input type="text" name="name" required /></label>
+          <label><span>CPF</span><input type="text" name="cpf" required /></label>
+          <label><span>RG</span><input type="text" name="rg" required /></label>
+          <label><span>Endereço</span><input type="text" name="address" required /></label>
+          <label><span>CEP</span><input type="text" name="cep" required /></label>
+          <label><span>E-mail</span><input type="email" name="email" required /></label>
+          <label><span>WhatsApp</span><input type="text" name="whatsapp" required /></label>
+          <label><span>Senha</span><input type="password" name="password" required /></label>
+          <div class="full-width actions-row">
+            <button class="btn btn-primary" type="submit">Cadastrar candidato</button>
+            <button class="btn btn-outline" type="button" data-route="home">Voltar</button>
+          </div>
+        </form>
+      </div>
     </section>
+  </template>
 
-    <section class="card">
-      <h2>Demandas Disponíveis</h2>
-      <div id="listaDemandas"></div>
+  <template id="empresa-auth-template">
+    <section class="auth-layout two-column">
+      <div class="card">
+        <div class="section-title">
+          <span class="badge badge-red">Login empresa</span>
+          <h2>Acessar painel</h2>
+        </div>
+        <form id="companyLoginForm" class="form-stack">
+          <label>
+            <span>E-mail</span>
+            <input type="email" name="email" placeholder="empresa@exemplo.com" required />
+          </label>
+          <label>
+            <span>Senha</span>
+            <input type="password" name="password" placeholder="Digite sua senha" required />
+          </label>
+          <button class="btn btn-danger" type="submit">Entrar</button>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <span class="badge badge-blue">Cadastro empresa</span>
+          <h2>Criar conta</h2>
+        </div>
+        <form id="companyRegisterForm" class="form-grid">
+          <label><span>Nome da empresa</span><input type="text" name="name" required /></label>
+          <label><span>CNPJ</span><input type="text" name="cnpj" required /></label>
+          <label><span>Segmento</span><input type="text" name="segment" required /></label>
+          <label><span>E-mail</span><input type="email" name="email" required /></label>
+          <label><span>WhatsApp</span><input type="text" name="whatsapp" required /></label>
+          <label><span>Senha</span><input type="password" name="password" required /></label>
+          <div class="full-width actions-row">
+            <button class="btn btn-danger" type="submit">Cadastrar empresa</button>
+            <button class="btn btn-outline" type="button" data-route="home">Voltar</button>
+          </div>
+        </form>
+      </div>
     </section>
+  </template>
 
-    <section class="card">
-      <h2>Candidatos Cadastrados</h2>
-      <div id="listaCandidatos"></div>
+  <template id="candidate-dashboard-template">
+    <section class="dashboard-stack">
+      <div class="card dashboard-header">
+        <div>
+          <span class="badge badge-blue">Área do candidato</span>
+          <h2 id="candidateGreeting"></h2>
+          <p>Veja as demandas disponíveis e faça sua inscrição em um clique.</p>
+        </div>
+        <button class="btn btn-outline" data-route="home">Tela inicial</button>
+      </div>
+
+      <section class="stats-grid">
+        <article class="card stat-card">
+          <strong id="candidateVacanciesCount">0</strong>
+          <span>Demandas disponíveis</span>
+        </article>
+        <article class="card stat-card">
+          <strong id="candidateApplicationsCount">0</strong>
+          <span>Minhas inscrições</span>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-title inline-title">
+          <div>
+            <span class="badge badge-red">Vagas</span>
+            <h3>Demandas publicadas pelas empresas</h3>
+          </div>
+        </div>
+        <div id="vacanciesList" class="cards-list"></div>
+      </section>
     </section>
-  </main>
+  </template>
 
-  <script src="script.js"></script>
+  <template id="company-dashboard-template">
+    <section class="dashboard-stack">
+      <div class="card dashboard-header">
+        <div>
+          <span class="badge badge-red">Área da empresa</span>
+          <h2 id="companyGreeting"></h2>
+          <p>Publique demandas diárias e acompanhe os candidatos inscritos.</p>
+        </div>
+        <button class="btn btn-outline" data-route="home">Tela inicial</button>
+      </div>
+
+      <section class="stats-grid">
+        <article class="card stat-card">
+          <strong id="companyJobsCount">0</strong>
+          <span>Demandas criadas</span>
+        </article>
+        <article class="card stat-card">
+          <strong id="companyApplicantsCount">0</strong>
+          <span>Total de inscrições</span>
+        </article>
+      </section>
+
+      <section class="card">
+        <div class="section-title">
+          <span class="badge badge-blue">Nova demanda</span>
+          <h3>Publicar vaga diária</h3>
+        </div>
+        <form id="jobForm" class="form-grid">
+          <label><span>Tipo da vaga</span><input type="text" name="jobType" required /></label>
+          <label><span>Valor da diária</span><input type="number" min="0" step="0.01" name="dailyRate" required /></label>
+          <label><span>Data de pagamento</span><input type="date" name="paymentDate" required /></label>
+          <label><span>Local</span><input type="text" name="location" required /></label>
+          <label>
+            <span>Tipo de local</span>
+            <select name="placeType" required>
+              <option value="">Selecione</option>
+              <option value="Galpão">Galpão</option>
+              <option value="Loja">Loja</option>
+            </select>
+          </label>
+          <div class="full-width">
+            <button class="btn btn-danger" type="submit">Salvar demanda</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="section-title inline-title">
+          <div>
+            <span class="badge badge-red">Minhas demandas</span>
+            <h3>Vagas publicadas</h3>
+          </div>
+        </div>
+        <div id="companyJobsList" class="cards-list"></div>
+      </section>
+    </section>
+  </template>
+
+  <template id="vacancy-card-template">
+    <article class="list-card job-card">
+      <div class="job-card-top">
+        <div>
+          <h4 class="job-title"></h4>
+          <p class="job-company"></p>
+        </div>
+        <span class="pill job-place"></span>
+      </div>
+      <div class="job-meta"></div>
+      <div class="job-applicants"></div>
+      <button class="btn btn-primary apply-btn">Inscrever-se</button>
+    </article>
+  </template>
+
+  <template id="company-job-card-template">
+    <article class="list-card job-card">
+      <div class="job-card-top">
+        <div>
+          <h4 class="job-title"></h4>
+          <p class="job-company"></p>
+        </div>
+        <span class="pill job-place"></span>
+      </div>
+      <div class="job-meta"></div>
+      <div class="applicants-box"></div>
+    </article>
+  </template>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
 </body>
 </html>
