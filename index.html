@@ -4,14 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Demanda Serviços</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
   <div class="app-shell">
     <header class="topbar">
@@ -19,10 +16,8 @@
         <p class="eyebrow">Plataforma de demandas diárias</p>
         <h1>Demanda Serviços</h1>
       </div>
-
       <button id="logoutBtn" class="btn btn-outline hidden">Sair</button>
     </header>
-
     <main id="app"></main>
   </div>
 
@@ -31,20 +26,11 @@
       <div class="hero-content">
         <span class="tag">App Web conectado ao Google Sheets</span>
         <h2>Conecte empresas e candidatos para serviços diários</h2>
-        <p>
-          Aplicativo responsivo para Android e computador com duas áreas de acesso:
-          <strong>Empresa</strong> e <strong>Candidato</strong>.
-        </p>
+        <p>Aplicativo responsivo para Android e computador com duas áreas de acesso: <strong>Empresa</strong> e <strong>Candidato</strong>.</p>
       </div>
-
       <div class="hero-actions">
-        <button class="btn btn-primary" data-route="candidato-auth">
-          Entrar como Candidato
-        </button>
-
-        <button class="btn btn-danger" data-route="empresa-auth">
-          Entrar como Empresa
-        </button>
+        <button class="btn btn-primary" data-route="candidato-auth">Entrar como Candidato</button>
+        <button class="btn btn-danger" data-route="empresa-auth">Entrar como Empresa</button>
       </div>
     </section>
 
@@ -53,15 +39,13 @@
         <h3>Candidato</h3>
         <p>Cadastro completo com dados pessoais e inscrição rápida nas vagas disponíveis.</p>
       </article>
-
       <article class="card feature">
         <h3>Empresa</h3>
         <p>Cadastro da empresa, publicação de demandas, valor da diária e acompanhamento de inscritos.</p>
       </article>
-
       <article class="card feature">
         <h3>Planilha Online</h3>
-        <p>Os cadastros e inscrições podem ser enviados para sua planilha Google Sheets via Apps Script.</p>
+        <p>Os cadastros e inscrições são enviados para sua planilha Google Sheets via Apps Script.</p>
       </article>
     </section>
   </template>
@@ -73,18 +57,9 @@
           <span class="badge badge-blue">Login candidato</span>
           <h2>Acessar conta</h2>
         </div>
-
         <form id="candidateLoginForm" class="form-stack">
-          <label>
-            <span>E-mail</span>
-            <input type="email" name="email" placeholder="seuemail@exemplo.com" required />
-          </label>
-
-          <label>
-            <span>Senha</span>
-            <input type="password" name="password" placeholder="Digite sua senha" required />
-          </label>
-
+          <label><span>E-mail</span><input type="email" name="email" placeholder="seuemail@exemplo.com" required /></label>
+          <label><span>Senha</span><input type="password" name="password" placeholder="Digite sua senha" required /></label>
           <button class="btn btn-primary" type="submit">Entrar</button>
         </form>
       </div>
@@ -94,7 +69,6 @@
           <span class="badge badge-red">Cadastro candidato</span>
           <h2>Criar conta</h2>
         </div>
-
         <form id="candidateRegisterForm" class="form-grid">
           <label><span>Nome</span><input type="text" name="name" required /></label>
           <label><span>CPF</span><input type="text" name="cpf" required /></label>
@@ -104,7 +78,6 @@
           <label><span>E-mail</span><input type="email" name="email" required /></label>
           <label><span>WhatsApp</span><input type="text" name="whatsapp" required /></label>
           <label><span>Senha</span><input type="password" name="password" required /></label>
-
           <div class="full-width actions-row">
             <button class="btn btn-primary" type="submit">Cadastrar candidato</button>
             <button class="btn btn-outline" type="button" data-route="home">Voltar</button>
@@ -121,18 +94,9 @@
           <span class="badge badge-red">Login empresa</span>
           <h2>Acessar painel</h2>
         </div>
-
         <form id="companyLoginForm" class="form-stack">
-          <label>
-            <span>E-mail</span>
-            <input type="email" name="email" placeholder="empresa@exemplo.com" required />
-          </label>
-
-          <label>
-            <span>Senha</span>
-            <input type="password" name="password" placeholder="Digite sua senha" required />
-          </label>
-
+          <label><span>E-mail</span><input type="email" name="email" placeholder="empresa@exemplo.com" required /></label>
+          <label><span>Senha</span><input type="password" name="password" placeholder="Digite sua senha" required /></label>
           <button class="btn btn-danger" type="submit">Entrar</button>
         </form>
       </div>
@@ -142,7 +106,6 @@
           <span class="badge badge-blue">Cadastro empresa</span>
           <h2>Criar conta</h2>
         </div>
-
         <form id="companyRegisterForm" class="form-grid">
           <label><span>Nome da empresa</span><input type="text" name="name" required /></label>
           <label><span>CNPJ</span><input type="text" name="cnpj" required /></label>
@@ -150,7 +113,6 @@
           <label><span>E-mail</span><input type="email" name="email" required /></label>
           <label><span>WhatsApp</span><input type="text" name="whatsapp" required /></label>
           <label><span>Senha</span><input type="password" name="password" required /></label>
-
           <div class="full-width actions-row">
             <button class="btn btn-danger" type="submit">Cadastrar empresa</button>
             <button class="btn btn-outline" type="button" data-route="home">Voltar</button>
@@ -168,7 +130,6 @@
           <h2 id="candidateGreeting"></h2>
           <p>Veja as demandas disponíveis e faça sua inscrição em um clique.</p>
         </div>
-
         <button class="btn btn-outline" data-route="home">Tela inicial</button>
       </div>
 
@@ -177,7 +138,6 @@
           <strong id="candidateVacanciesCount">0</strong>
           <span>Demandas disponíveis</span>
         </article>
-
         <article class="card stat-card">
           <strong id="candidateApplicationsCount">0</strong>
           <span>Minhas inscrições</span>
@@ -191,7 +151,6 @@
             <h3>Demandas publicadas pelas empresas</h3>
           </div>
         </div>
-
         <div id="vacanciesList" class="cards-list"></div>
       </section>
     </section>
@@ -205,7 +164,6 @@
           <h2 id="companyGreeting"></h2>
           <p>Publique demandas diárias e acompanhe os candidatos inscritos.</p>
         </div>
-
         <button class="btn btn-outline" data-route="home">Tela inicial</button>
       </div>
 
@@ -214,7 +172,6 @@
           <strong id="companyJobsCount">0</strong>
           <span>Demandas criadas</span>
         </article>
-
         <article class="card stat-card">
           <strong id="companyApplicantsCount">0</strong>
           <span>Total de inscrições</span>
@@ -226,13 +183,11 @@
           <span class="badge badge-blue">Nova demanda</span>
           <h3>Publicar vaga diária</h3>
         </div>
-
         <form id="jobForm" class="form-grid">
           <label><span>Tipo da vaga</span><input type="text" name="jobType" required /></label>
           <label><span>Valor da diária</span><input type="number" min="0" step="0.01" name="dailyRate" required /></label>
           <label><span>Data de pagamento</span><input type="date" name="paymentDate" required /></label>
           <label><span>Local</span><input type="text" name="location" required /></label>
-
           <label>
             <span>Tipo de local</span>
             <select name="placeType" required>
@@ -244,7 +199,6 @@
               <option value="Outro">Outro</option>
             </select>
           </label>
-
           <div class="full-width">
             <button class="btn btn-danger" type="submit">Salvar demanda</button>
           </div>
@@ -258,7 +212,6 @@
             <h3>Vagas publicadas</h3>
           </div>
         </div>
-
         <div id="companyJobsList" class="cards-list"></div>
       </section>
     </section>
@@ -271,13 +224,10 @@
           <h4 class="job-title"></h4>
           <p class="job-company"></p>
         </div>
-
         <span class="pill job-place"></span>
       </div>
-
       <div class="job-meta"></div>
       <div class="job-applicants"></div>
-
       <button class="btn btn-primary apply-btn">Inscrever-se</button>
     </article>
   </template>
@@ -289,17 +239,14 @@
           <h4 class="job-title"></h4>
           <p class="job-company"></p>
         </div>
-
         <span class="pill job-place"></span>
       </div>
-
       <div class="job-meta"></div>
       <div class="applicants-box"></div>
     </article>
   </template>
 
   <div id="toast" class="toast hidden"></div>
-
   <script src="app.js"></script>
 </body>
 </html>
