@@ -1,6 +1,5 @@
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOHPZKVnHTeWqGf7KYHlouwSgjJGDYlENPJdJcWYUwal0P05c_irnhXZWPiE3nbwph/exec";
 
-
 const STORAGE_KEYS = {
   candidates: "demanda_candidates",
   companies: "demanda_companies",
@@ -56,7 +55,7 @@ function load(key, fallback) {
   try {
     return JSON.parse(data);
   } catch (error) {
-    console.error("Erro ao ler storage", error);
+    console.error("Erro ao ler storage:", error);
     return fallback;
   }
 }
@@ -73,12 +72,26 @@ function persist() {
   save(STORAGE_KEYS.session, state.session);
 }
 
-function sendToSheet(data) {
-  fetch(GOOGLE_SCRIPT_URL, {
+async function sendToSheet(data) {
+  const response = await fetch(GOOGLE_SCRIPT_URL, {
     method: "POST",
-    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
     body: JSON.stringify(data)
   });
+
+  if (!response.ok) {
+    throw new Error(`Falha HTTP ao salvar na planilha (${response.status})`);
+  }
+
+  const result = await response.json();
+
+  if (!result || result.status !== "success") {
+    throw new Error(result?.message || "Falha ao salvar na planilha.");
+  }
+
+  return result;
 }
 
 function setRoute(route) {
@@ -203,45 +216,57 @@ function renderCandidateAuth() {
     showToast("Login realizado com sucesso.");
   });
 
-  registerForm.addEventListener("submit", (event) => {
+  registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const form = new FormData(registerForm);
-    const email = form.get("email").toString().trim().toLowerCase();
+    try {
+      const form = new FormData(registerForm);
+      const email = form.get("email").toString().trim().toLowerCase();
 
-    if (state.candidates.some((item) => item.email === email)) {
-      showToast("Já existe um candidato cadastrado com este e-mail.");
-      return;
+      if (state.candidates.some((item) => item.email === email)) {
+        showToast("Já existe um candidato cadastrado com este e-mail.");
+        return;
+      }
+
+      const candidate = {
+        id: crypto.randomUUID(),
+        name: form.get("name").toString().trim(),
+        cpf: form.get("cpf").toString().trim(),
+        rg: form.get("rg").toString().trim(),
+        address: form.get("address").toString().trim(),
+        cep: form.get("cep").toString().trim(),
+        email,
+        whatsapp: form.get("whatsapp").toString().trim(),
+        password: form.get("password").toString(),
+        createdAt: new Date().toISOString()
+      };
+
+      await sendToSheet({
+        type: "candidate",
+        id: candidate.id,
+        name: candidate.name,
+        cpf: candidate.cpf,
+        rg: candidate.rg,
+        address: candidate.address,
+        cep: candidate.cep,
+        email: candidate.email,
+        whatsapp: candidate.whatsapp,
+        createdAt: candidate.createdAt
+      });
+
+      state.candidates.unshift(candidate);
+      state.session = {
+        id: candidate.id,
+        type: "candidate"
+      };
+
+      persist();
+      setRoute("candidate-dashboard");
+      showToast("Cadastro de candidato concluído.");
+    } catch (error) {
+      console.error(error);
+      showToast("Erro ao salvar candidato na planilha.");
     }
-
-    const candidate = {
-      id: crypto.randomUUID(),
-      name: form.get("name").toString().trim(),
-      cpf: form.get("cpf").toString().trim(),
-      rg: form.get("rg").toString().trim(),
-      address: form.get("address").toString().trim(),
-      cep: form.get("cep").toString().trim(),
-      email,
-      whatsapp: form.get("whatsapp").toString().trim(),
-      password: form.get("password").toString(),
-      createdAt: new Date().toISOString()
-    };
-
-    state.candidates.unshift(candidate);
-
-    sendToSheet({
-      type: "candidate",
-      ...candidate
-    });
-
-    state.session = {
-      id: candidate.id,
-      type: "candidate"
-    };
-
-    persist();
-    setRoute("candidate-dashboard");
-    showToast("Cadastro de candidato concluído.");
   });
 }
 
@@ -280,43 +305,53 @@ function renderCompanyAuth() {
     showToast("Login da empresa realizado com sucesso.");
   });
 
-  registerForm.addEventListener("submit", (event) => {
+  registerForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const form = new FormData(registerForm);
-    const email = form.get("email").toString().trim().toLowerCase();
+    try {
+      const form = new FormData(registerForm);
+      const email = form.get("email").toString().trim().toLowerCase();
 
-    if (state.companies.some((item) => item.email === email)) {
-      showToast("Já existe uma empresa cadastrada com este e-mail.");
-      return;
+      if (state.companies.some((item) => item.email === email)) {
+        showToast("Já existe uma empresa cadastrada com este e-mail.");
+        return;
+      }
+
+      const company = {
+        id: crypto.randomUUID(),
+        name: form.get("name").toString().trim(),
+        cnpj: form.get("cnpj").toString().trim(),
+        segment: form.get("segment").toString().trim(),
+        email,
+        whatsapp: form.get("whatsapp").toString().trim(),
+        password: form.get("password").toString(),
+        createdAt: new Date().toISOString()
+      };
+
+      await sendToSheet({
+        type: "company",
+        id: company.id,
+        name: company.name,
+        cnpj: company.cnpj,
+        segment: company.segment,
+        email: company.email,
+        whatsapp: company.whatsapp,
+        createdAt: company.createdAt
+      });
+
+      state.companies.unshift(company);
+      state.session = {
+        id: company.id,
+        type: "company"
+      };
+
+      persist();
+      setRoute("company-dashboard");
+      showToast("Cadastro de empresa concluído.");
+    } catch (error) {
+      console.error(error);
+      showToast("Erro ao salvar empresa na planilha.");
     }
-
-    const company = {
-      id: crypto.randomUUID(),
-      name: form.get("name").toString().trim(),
-      cnpj: form.get("cnpj").toString().trim(),
-      segment: form.get("segment").toString().trim(),
-      email,
-      whatsapp: form.get("whatsapp").toString().trim(),
-      password: form.get("password").toString(),
-      createdAt: new Date().toISOString()
-    };
-
-    state.companies.unshift(company);
-
-    sendToSheet({
-      type: "company",
-      ...company
-    });
-
-    state.session = {
-      id: company.id,
-      type: "company"
-    };
-
-    persist();
-    setRoute("company-dashboard");
-    showToast("Cadastro de empresa concluído.");
   });
 }
 
@@ -382,29 +417,43 @@ function renderCandidateDashboard() {
       applyButton.classList.toggle("btn-outline", alreadyApplied);
 
       if (!alreadyApplied) {
-        applyButton.addEventListener("click", () => {
-          const application = {
-            id: crypto.randomUUID(),
-            jobId: job.id,
-            candidateId: candidate.id,
-            candidateName: candidate.name,
-            candidateEmail: candidate.email,
-            candidateWhatsapp: candidate.whatsapp,
-            jobType: job.jobType,
-            companyName: job.companyName,
-            createdAt: new Date().toISOString()
-          };
+        applyButton.addEventListener("click", async () => {
+          try {
+            const application = {
+              id: crypto.randomUUID(),
+              jobId: job.id,
+              candidateId: candidate.id,
+              candidateName: candidate.name,
+              candidateEmail: candidate.email,
+              candidateWhatsapp: candidate.whatsapp,
+              jobType: job.jobType,
+              companyId: job.companyId,
+              companyName: job.companyName,
+              createdAt: new Date().toISOString()
+            };
 
-          state.applications.unshift(application);
+            await sendToSheet({
+              type: "application",
+              id: application.id,
+              jobId: application.jobId,
+              candidateId: application.candidateId,
+              candidateName: application.candidateName,
+              candidateEmail: application.candidateEmail,
+              candidateWhatsapp: application.candidateWhatsapp,
+              jobType: application.jobType,
+              companyId: application.companyId,
+              companyName: application.companyName,
+              createdAt: application.createdAt
+            });
 
-          sendToSheet({
-            type: "application",
-            ...application
-          });
-
-          persist();
-          render();
-          showToast("Você se inscreveu na demanda com sucesso.");
+            state.applications.unshift(application);
+            persist();
+            render();
+            showToast("Você se inscreveu na demanda com sucesso.");
+          } catch (error) {
+            console.error(error);
+            showToast("Erro ao salvar inscrição na planilha.");
+          }
         });
       }
 
@@ -442,33 +491,45 @@ function renderCompanyDashboard() {
 
   const jobForm = document.getElementById("jobForm");
 
-  jobForm.addEventListener("submit", (event) => {
+  jobForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const form = new FormData(jobForm);
+    try {
+      const form = new FormData(jobForm);
 
-    const job = {
-      id: crypto.randomUUID(),
-      companyId: company.id,
-      companyName: company.name,
-      jobType: form.get("jobType").toString().trim(),
-      dailyRate: Number(form.get("dailyRate")),
-      paymentDate: form.get("paymentDate").toString(),
-      location: form.get("location").toString().trim(),
-      placeType: form.get("placeType").toString(),
-      createdAt: new Date().toISOString()
-    };
+      const job = {
+        id: crypto.randomUUID(),
+        companyId: company.id,
+        companyName: company.name,
+        jobType: form.get("jobType").toString().trim(),
+        dailyRate: Number(form.get("dailyRate")),
+        paymentDate: form.get("paymentDate").toString(),
+        location: form.get("location").toString().trim(),
+        placeType: form.get("placeType").toString(),
+        createdAt: new Date().toISOString()
+      };
 
-    state.jobs.unshift(job);
+      await sendToSheet({
+        type: "job",
+        id: job.id,
+        companyId: job.companyId,
+        companyName: job.companyName,
+        jobType: job.jobType,
+        dailyRate: job.dailyRate,
+        paymentDate: job.paymentDate,
+        location: job.location,
+        placeType: job.placeType,
+        createdAt: job.createdAt
+      });
 
-    sendToSheet({
-      type: "job",
-      ...job
-    });
-
-    persist();
-    render();
-    showToast("Demanda publicada com sucesso.");
+      state.jobs.unshift(job);
+      persist();
+      render();
+      showToast("Demanda publicada com sucesso.");
+    } catch (error) {
+      console.error(error);
+      showToast("Erro ao salvar vaga na planilha.");
+    }
   });
 
   const list = document.getElementById("companyJobsList");
