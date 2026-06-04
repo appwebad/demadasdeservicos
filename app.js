@@ -1,3 +1,4 @@
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyOHPZKVnHTeWqGf7KYHlouwSgjJGDYlENPJdJcWYUwal0P05c_irnhXZWPiE3nbwph/exec";
 const STORAGE_KEYS = {
   candidates: 'demanda_candidates',
   companies: 'demanda_companies',
